@@ -1,9 +1,7 @@
 <div align = "center">
 
 <img src = "./assets/logo.png" height = "128" width = "128" />
-<h1 align = "center">OAuth REST API</h1><br>
-
-<a href = "https://porgz.github.io/OAuth-REST-API/">Code Documentations</a>
+<h1 align = "center">OAuth REST API</h1>
 
 </div>
 
