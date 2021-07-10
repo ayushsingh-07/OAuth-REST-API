@@ -29,7 +29,7 @@ jobs:
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
         # create necessary folder to keep logs
         mkdir -p /tmp/pOrgz
-    - name: deploy and test flask app with waitress-server
+    - name: deploy and test flask app with gunicorn
       run: |
         # install gunicorn dependencies
         python -m pip install gunicorn
