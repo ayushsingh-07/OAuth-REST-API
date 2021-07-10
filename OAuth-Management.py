@@ -5,26 +5,25 @@
 import os
 from flask_restful import Api
 
-from app.main import (
-        db, # SQLAlchemy Connector dB Object
-        create_app
-    )
+from app.main import create_app
+
 
 # setting the environment
 from dotenv import load_dotenv # Python 3.6+
-load_dotenv(verbose = True) # configure .env File or set Environment Variables
+load_dotenv(verbose=True) # configure .env File or set Environment Variables
 
-app = create_app(os.getenv("PROJECT_ENV_NAME") or "dev") # check config.py
-api = Api(app)
+app=create_app(os.getenv("PROJECT_ENV_NAME") or "dev") # check config.py
+api=Api(app)
 
-### --- List of all Resources --- ###
+
+# --- List of all Resources --- #
 from app.main.controller import *
 
-api.add_resource(OAuthController, "/login", endpoint = "login")
-api.add_resource(OAuthController, "/signup", endpoint = "default")
+api.add_resource(OAuthController, "/login", endpoint="login")
+api.add_resource(OAuthController, "/signup", endpoint="default")
 
 if __name__ == "__main__":
     app.run(
-        port = os.getenv('port', 5000), # run the application on default 5000 Port
-        host = os.getenv('host', 'localhost') # define host, as required
+        port=os.getenv('port', 5000), # run the application on default 5000 Port
+        host=os.getenv('host', 'localhost') # define host, as required
     )
