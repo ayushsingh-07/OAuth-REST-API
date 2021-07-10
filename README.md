@@ -5,7 +5,7 @@
 
 </div>
 
-<p align = "justify"><b>OAuth REST API</b> is a <i>high-level</i> interface designed for user authentication and security for <a href = "https://github.com/pOrgz/pOrgz-py"><b>pOrgz</b></a>. Built using <i>flask</i>, which is a <q>micro web framework</q>, and can be compiled with <b>python 3.6+</b> (as it uses the <i>f-string</i> conventions).</p>
+<p align = "justify"><b>OAuth REST API</b> is a <i>high-level</i> interface designed for user authentication and security for <a href = "https://github.com/pOrgz/pOrgz-py"><b>pOrgz</b></a>. Built using <i>flask</i>, which is a <q>micro web framework</q>, and can be compiled with <b>python 3.7+</b> (as it uses the <i>f-string</i> conventions).</p>
 
 ## Setup
 
@@ -55,3 +55,6 @@
     "time" : "<str> Time on which Login/Signup is Requested"
 }
 ```
+
+## Dependency for `importlib-resources`
+Python version 3.7 and above supports `importlib.resources` instead of `importlib_resources`. If using a version lower than 3.7, then install required dependency using `pip install importlib-resources`, however apart from this, the code should run in `py36` without a problem. Check `.github/gunicorn-server-py36.yml` to run a dependency check.
