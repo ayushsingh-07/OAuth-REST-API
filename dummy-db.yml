@@ -5,7 +5,7 @@ services:
 
   database:
 
-    image: mysql:5.7 # use the specified version, or use latest
+    image: mysql:8.0.26 # use the specified version, or use latest
 
     container_name: oauth-dummy-2
 
