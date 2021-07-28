@@ -71,3 +71,6 @@
 
 ## Dependency for `importlib-resources`
 Python version 3.7 and above supports `importlib.resources` instead of `importlib_resources`. If using a version lower than 3.7, then install required dependency using `pip install importlib-resources`, however apart from this, the code should run in `py36` without a problem. Check `.github/gunicorn-server-py36.yml` to run a dependency check.
+
+## Docker Information
+Setting up docker files for testing and development ease. Use `docker-compose -f dummy-db.yml up` to setup a testing environment which uses `MySQL v5.7`. TODO: create table, schema and default data for testing.
