@@ -2,9 +2,13 @@
 
 """Password Security with MD5"""
 
+import _io
+
 import os
 import hashlib
 import smtplib
+
+from email.message import EmailMessage
 
 # setting the environment
 from dotenv import load_dotenv # Python 3.6+
@@ -36,18 +40,19 @@ class Mailing(object):
         self._host = os.getenv("MAIL_SMTP_SERVER")
         self._port = os.getenv("MAIL_SMTP_SERVER_PORT")
 
+        # set email sender
+        self.sender = os.getenv("ADMIN_EMAIL")
+
         self.mail_server = smtplib.SMTP(
                 host = self._host,
                 port = self._port
             )
 
-        # login to the email server
-        self._login() 
-
     def _login(self):
         # check login
+        self.mail_server.connect(self._host, self._port)
         self.mail_server.login(
-                user     = os.getenv("ADMIN_EMAIL"),
+                user     = self.sender,
                 password = os.getenv("ADMIN_EMAIL_PASSWORD"),
             )
 
@@ -56,6 +61,27 @@ class Mailing(object):
     def _close(self):
         # close server
         self.mail_server.quit()
+        return True
+
+    def sendMail(
+            self,
+            receiver : str,
+            message  : str or _io.TextIOWrapper,
+            subject  : str = "OAuth Server Alerts"
+        ):
+        """Main Class to Send an Email"""
+
+        _msg = EmailMessage()
+        _msg.set_content(message)
+        _msg["Subject"] = subject
+        _msg["From"]    = self.sender
+        _msg["To"]      = receiver
+
+        self.mail_server.send_message(_msg)
+        # smtplib.SMTPServerDisconnected: please run connect() first
+        # self._close()
+        return True
+
 
     def __str__(self):
         return f"{__name__}: PROTOCOL = {self.protocol}"
@@ -67,10 +93,11 @@ if __name__ == "__main__":
     # check if email is working
     # run this code using `python utils.py`
     obj = Mailing()
-    print(obj, repr(obj))
+    # print(obj, repr(obj))
 
     try:
-        obj._login()
+        # obj._login()
+        obj.sendMail(receiver = "user@pOrgz.com", message = "Test SMTP Mail from Flask API!")
     except Exception as err:
         raise ValueError("Email Not Working", err)
     finally:
