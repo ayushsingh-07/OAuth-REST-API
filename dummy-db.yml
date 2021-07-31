@@ -10,7 +10,7 @@ services:
     container_name: oauth-dummy-2
 
     ports:
-      - "3306:3306" # mapping default port
+      - "33061:3306" # default mapped port to 33061, change as required
     
     volumes: # specify files/directory to map
       - ./assets/test_database.sql:/tmp/pOrgz/oauth/test_database.sql

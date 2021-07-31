@@ -23,6 +23,8 @@
 | dev_db | Development Database Name | pOrgz |
 | test_db | Production Database Name | test |
 
+[SQLAlchemy Engine String](https://docs.sqlalchemy.org/en/14/core/engines.html)
+
 ### Password Security and Encryption
 
 <p align = "justify">As decided earlier, <b>pOrgz</b> is currently set to work in localhost environment, safegurding user informations locally. Though local, there are certain security measures developed, one of which is encrypting the password, and using salting to save the password in the database - making it secure even if you are using a simple database like SQLite.</p>
