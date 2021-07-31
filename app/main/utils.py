@@ -8,7 +8,9 @@ import os
 import hashlib
 import smtplib
 
+from email.mime.text import MIMEText
 from email.message import EmailMessage
+from email.mime.multipart import MIMEMultipart
 
 # setting the environment
 from dotenv import load_dotenv # Python 3.6+
@@ -60,8 +62,12 @@ class Mailing(object):
 
     def _close(self):
         # close server
-        self.mail_server.quit()
-        return True
+        try:
+            self.mail_server.quit()
+        except smtplib.SMTPServerDisconnected:
+            return True # close the connection
+
+        return False
 
     def sendMail(
             self,
@@ -71,15 +77,25 @@ class Mailing(object):
         ):
         """Main Class to Send an Email"""
 
-        _msg = EmailMessage()
-        _msg.set_content(message)
-        _msg["Subject"] = subject
-        _msg["From"]    = self.sender
-        _msg["To"]      = receiver
+        if type(message) == str:
+            _msg = EmailMessage()
+            _msg.set_content(message) # text content can be set easily
 
-        self.mail_server.send_message(_msg)
-        # smtplib.SMTPServerDisconnected: please run connect() first
-        # self._close()
+            _msg["Subject"] = subject
+            _msg["From"]    = self.sender
+            _msg["To"]      = receiver
+
+            self.mail_server.send_message(_msg)
+        else: # type: _io.TextIOWrapper
+            _msg = MIMEMultipart('alternative')
+
+            _msg["Subject"] = subject + "(in HTML)"
+            _msg["From"]    = self.sender
+            _msg["To"]      = receiver
+
+            _msg.attach(MIMEText(message, 'html'))
+
+            self.mail_server.sendmail(self.sender, receiver, _msg.as_string())
         return True
 
 
@@ -92,15 +108,17 @@ class Mailing(object):
 if __name__ == "__main__":
     # check if email is working
     # run this code using `python utils.py`
+    import time
+
     obj = Mailing()
-    # print(obj, repr(obj))
+    print(f"{time.ctime()} Executing - {str(obj)}")
+    print(f"\t>> DevOps Note: {repr(obj)}")
 
-    try:
-        # obj._login()
-        obj.sendMail(receiver = "user@pOrgz.com", message = "Test SMTP Mail from Flask API!")
-    except Exception as err:
-        raise ValueError("Email Not Working", err)
-    finally:
-        obj._close()
+    # send plain text message
+    obj.sendMail(receiver = "user@pOrgz.com", message = "Greetings from pOrgz OAuth!")
 
-    print("success")
+    # send HTML template and other advanced message formats
+    obj.sendMail(receiver = "user@pOrgz.com", message = open("../static/template/dummy.html").read())
+
+    # close mailer
+    obj._close()
