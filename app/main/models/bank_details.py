@@ -23,13 +23,16 @@ class AccountDetails(db.Model):
     AccountNumber = db.Column(db.Integer, nullable = False, primary_key = True)
     AccountHolderName = db.Column(db.String(255), nullable = False)                    # Person Name
     AccountType = db.Column(db.String(255), nullable = False)
-    IFSCode  = db.Column(db.String(64), nullable = False)                               # Branch IFSC of the bank
+    IFSCode  = db.Column(db.String(64), db.ForeignKey('bankdetails.IFSCode'), nullable = False)                               # Branch IFSC of the bank
     CIF_Number = db.Column(db.String(255), nullable = False)                      
     Account_OpenDate = db.Column(db.Date, nullable = False)
+    Account_CloseDate = db.Column(db.Date, nullable = True)
+    Email_ID = db.Column(db.String(50), nullable = True)  
+    MobileNumber = db.Column(db.Integer, nullable = False)
 
     def __repr__(self):
         # return { c.key : getattr(self, c.key) for c in self.__table__.columns }
-        return f"<{self.IFSCode}(Bank Name = {self.BankName}, Branch Name = {self.BranchName}>"
+        return f"<{self.AccountNumber}(AccountNumber = {self.AccountNumber}, AccountHolderName = {self.AccountHolderName}>"
 
     def toDict(self):
         return { c.key : getattr(self, c.key) for c in self.__table__.columns }
